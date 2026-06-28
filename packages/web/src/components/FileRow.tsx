@@ -1,3 +1,4 @@
+import { useEffect, useMemo } from "react";
 import {
   Clock,
   Loader2,
@@ -6,6 +7,7 @@ import {
   Download,
 } from "lucide-react";
 import type { ProcessResult } from "../lib/processor";
+import { ABPlayer } from "./ABPlayer";
 
 export interface FileItem {
   id: number;
@@ -33,6 +35,19 @@ function fmtDuration(sec: number): string {
 
 export function FileRow({ item, onDownload }: Props) {
   const { file, status, result, error } = item;
+
+  // Object URLs for A/B playback (original vs normalized). Revoked on unmount.
+  const beforeUrl = useMemo(() => URL.createObjectURL(file), [file]);
+  const afterUrl = useMemo(
+    () => (result ? URL.createObjectURL(result.blob) : ""),
+    [result],
+  );
+  useEffect(() => () => URL.revokeObjectURL(beforeUrl), [beforeUrl]);
+  useEffect(() => {
+    return () => {
+      if (afterUrl) URL.revokeObjectURL(afterUrl);
+    };
+  }, [afterUrl]);
 
   return (
     <div className={`file-row ${status}`}>
@@ -99,6 +114,12 @@ export function FileRow({ item, onDownload }: Props) {
           </button>
         )}
       </div>
+
+      {status === "done" && result && afterUrl && (
+        <div className="file-player">
+          <ABPlayer beforeUrl={beforeUrl} afterUrl={afterUrl} />
+        </div>
+      )}
 
       {status === "error" && <div className="file-error">{error}</div>}
     </div>

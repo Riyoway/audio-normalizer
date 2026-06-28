@@ -9,3 +9,5 @@ packages/web/dist/
 *.tsbuildinfo
 # sample/output audio used during local testing
 /tmp-audio/
+
+.vercel
