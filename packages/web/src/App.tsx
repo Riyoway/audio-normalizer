@@ -9,6 +9,7 @@ import {
   CloudOff,
   Zap,
   ArrowUpRight,
+  Trash2,
 } from "lucide-react";
 
 function GitHubMark({ size = 18 }: { size?: number }) {
@@ -111,6 +112,13 @@ export function App() {
       .forEach((it, i) => setTimeout(() => downloadOne(it), i * 150));
   };
 
+  const removeItem = useCallback(
+    (id: number) => setItems((prev) => prev.filter((it) => it.id !== id)),
+    [],
+  );
+
+  const clearAll = useCallback(() => setItems([]), []);
+
   const doneCount = items.filter((it) => it.status === "done").length;
 
   return (
@@ -165,7 +173,7 @@ export function App() {
 
         <section className="panel">
           <div className="panel-head">
-            <span className="panel-index">01</span>
+            <span className="panel-index">1</span>
             <span className="panel-title">Target</span>
             <span className="panel-note">how loud &amp; what format</span>
           </div>
@@ -203,7 +211,7 @@ export function App() {
 
         <section className="panel">
           <div className="panel-head">
-            <span className="panel-index">02</span>
+            <span className="panel-index">2</span>
             <span className="panel-title">Source</span>
             <span className="panel-note">nothing is uploaded</span>
           </div>
@@ -213,12 +221,16 @@ export function App() {
         {items.length > 0 && (
           <section className="panel">
             <div className="panel-head results-head">
-              <span className="panel-index">03</span>
+              <span className="panel-index">3</span>
               <span className="panel-title">Output</span>
               <span className="results-count">
                 {doneCount}/{items.length} ready
               </span>
               <div className="results-actions">
+                <button onClick={clearAll} className="btn-ghost">
+                  <Trash2 size={15} />
+                  Clear
+                </button>
                 <button onClick={reprocessAll} className="btn-secondary">
                   <RefreshCw size={15} />
                   Re-apply
@@ -235,7 +247,12 @@ export function App() {
             </div>
             <div className="file-list">
               {items.map((item) => (
-                <FileRow key={item.id} item={item} onDownload={downloadOne} />
+                <FileRow
+                  key={item.id}
+                  item={item}
+                  onDownload={downloadOne}
+                  onRemove={removeItem}
+                />
               ))}
             </div>
           </section>

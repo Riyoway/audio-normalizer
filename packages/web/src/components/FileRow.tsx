@@ -1,11 +1,5 @@
 import { useEffect, useMemo } from "react";
-import {
-  Clock,
-  Loader2,
-  TriangleAlert,
-  CircleAlert,
-  Download,
-} from "lucide-react";
+import { Loader2, TriangleAlert, CircleAlert, Download, X } from "lucide-react";
 import type { ProcessResult } from "../lib/processor";
 import { ABPlayer } from "./ABPlayer";
 
@@ -20,6 +14,7 @@ export interface FileItem {
 interface Props {
   item: FileItem;
   onDownload: (item: FileItem) => void;
+  onRemove: (id: number) => void;
 }
 
 function fmtDb(v: number): string {
@@ -33,7 +28,7 @@ function fmtDuration(sec: number): string {
   return `${m}:${s.toString().padStart(2, "0")}`;
 }
 
-export function FileRow({ item, onDownload }: Props) {
+export function FileRow({ item, onDownload, onRemove }: Props) {
   const { file, status, result, error } = item;
 
   // Object URLs for A/B playback (original vs normalized). Revoked on unmount.
@@ -51,50 +46,58 @@ export function FileRow({ item, onDownload }: Props) {
 
   return (
     <div className={`file-row ${status}`}>
-      <div className="file-main">
-        <div className="file-name" title={file.name}>
-          {file.name}
-        </div>
-        {result && (
-          <div className="file-meta">
-            {fmtDuration(result.durationSec)} · {result.channels === 1 ? "mono" : "stereo"} ·{" "}
-            {(result.sampleRate / 1000).toFixed(1)} kHz
+      <div className="file-head">
+        <div className="file-main">
+          <div className="file-name" title={file.name}>
+            {file.name}
           </div>
-        )}
+          {result && (
+            <div className="file-meta">
+              {fmtDuration(result.durationSec)} · {result.channels === 1 ? "mono" : "stereo"} ·{" "}
+              {(result.sampleRate / 1000).toFixed(1)} kHz
+            </div>
+          )}
+        </div>
+
+        <div className="file-head-actions">
+          {status === "pending" && <span className="badge pending">Queued</span>}
+          {status === "processing" && (
+            <span className="badge processing">
+              <Loader2 size={13} className="spin" />
+              Analyzing…
+            </span>
+          )}
+          {status === "error" && (
+            <span className="badge error" title={error}>
+              <TriangleAlert size={13} />
+              Error
+            </span>
+          )}
+          <button
+            className="file-remove"
+            onClick={() => onRemove(item.id)}
+            aria-label="Remove from list"
+            title="Remove"
+          >
+            <X size={16} />
+          </button>
+        </div>
       </div>
 
-      <div className="file-status">
-        {status === "pending" && (
-          <span className="badge pending">
-            <Clock size={13} />
-            Queued
-          </span>
-        )}
-        {status === "processing" && (
-          <span className="badge processing">
-            <Loader2 size={13} className="spin" />
-            Analyzing…
-          </span>
-        )}
-        {status === "error" && (
-          <span className="badge error" title={error}>
-            <TriangleAlert size={13} />
-            Error
-          </span>
-        )}
-        {status === "done" && result && (
-          <div className="metrics">
-            <div className="metric">
-              <span className="metric-label">Loudness</span>
-              <span className="metric-value">{fmtDb(result.measurement.integratedLufs)} LUFS</span>
+      {status === "done" && result && (
+        <>
+          <div className="file-stats">
+            <div className="stat">
+              <span className="stat-label">Loudness</span>
+              <span className="stat-value">{fmtDb(result.measurement.integratedLufs)} LUFS</span>
             </div>
-            <div className="metric">
-              <span className="metric-label">Peak</span>
-              <span className="metric-value">{fmtDb(result.measurement.truePeakDb)} dB</span>
+            <div className="stat">
+              <span className="stat-label">Peak</span>
+              <span className="stat-value">{fmtDb(result.measurement.truePeakDb)} dB</span>
             </div>
-            <div className="metric gain">
-              <span className="metric-label">Gain</span>
-              <span className="metric-value">{fmtDb(result.plan.gainDb)} dB</span>
+            <div className="stat">
+              <span className="stat-label">Gain applied</span>
+              <span className="stat-value accent">{fmtDb(result.plan.gainDb)} dB</span>
             </div>
             {result.plan.peakLimited && (
               <span className="badge limited" title="Gain reduced to avoid clipping">
@@ -102,23 +105,16 @@ export function FileRow({ item, onDownload }: Props) {
                 peak-limited
               </span>
             )}
+            <button className="btn-download" onClick={() => onDownload(item)}>
+              <Download size={15} />
+              Download
+            </button>
           </div>
-        )}
-      </div>
 
-      <div className="file-action">
-        {status === "done" && (
-          <button className="btn-download" onClick={() => onDownload(item)}>
-            <Download size={15} />
-            Download
-          </button>
-        )}
-      </div>
-
-      {status === "done" && result && afterUrl && (
-        <div className="file-player">
-          <ABPlayer beforeUrl={beforeUrl} afterUrl={afterUrl} />
-        </div>
+          <div className="file-player">
+            <ABPlayer beforeUrl={beforeUrl} afterUrl={afterUrl} />
+          </div>
+        </>
       )}
 
       {status === "error" && <div className="file-error">{error}</div>}
