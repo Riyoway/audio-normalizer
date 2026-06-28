@@ -50,11 +50,6 @@ export function App() {
   const { canInstall, promptInstall } = usePwaInstall();
   const year = new Date().getFullYear();
 
-  const readout =
-    preset.method === "peak"
-      ? { value: (preset.targetPeakDb ?? -1).toFixed(0), unit: "dB PEAK" }
-      : { value: (preset.targetLufs ?? -14).toFixed(0), unit: "LUFS" };
-
   const update = useCallback((id: number, patch: Partial<FileItem>) => {
     setItems((prev) => prev.map((it) => (it.id === id ? { ...it, ...patch } : it)));
   }, []);
@@ -160,36 +155,12 @@ export function App() {
       ) : (
         <main className="app-main">
         <section className="hero">
-          <span className="eyebrow">Loudness Normalizer · EBU R128</span>
-          <h1>
-            Make every clip sit at the <em>right volume.</em>
-          </h1>
+          <h1>Make every clip sit at the right volume.</h1>
           <p className="hero-sub">
             Free sound effects and UI clicks often blast out at full scale. Drop them
-            in, pick a target, and download audio that's measured to a consistent,
-            broadcast-grade loudness — entirely in your browser.
+            in, pick a target loudness, and download audio normalized to a consistent
+            level — entirely in your browser.
           </p>
-
-          <div className="meter" aria-hidden="true">
-            <div className="meter-top">
-              <span className="eyebrow">Target</span>
-              <span className="meter-readout">
-                {readout.value}
-                <small>{readout.unit}</small>
-              </span>
-            </div>
-            <div className="meter-track">
-              <span className="meter-needle" />
-            </div>
-            <div className="meter-scale">
-              <span>−30</span>
-              <span>−23</span>
-              <span>−16</span>
-              <span className="tgt">−14</span>
-              <span>−9</span>
-              <span>0</span>
-            </div>
-          </div>
         </section>
 
         <section className="panel">
@@ -360,8 +331,6 @@ export function App() {
           <span className="mono footer-tech">ITU-R BS.1770 · EBU R128 · ffmpeg</span>
         </div>
       </footer>
-
-      <div className="grain" />
     </div>
   );
 }
