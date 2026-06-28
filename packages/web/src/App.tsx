@@ -328,7 +328,7 @@ export function App() {
             </a>
             <a
               className="footer-link"
-              href="https://www.npmjs.com/package/audio-normalizer"
+              href="https://www.npmjs.com/package/audionorm"
               target="_blank"
               rel="noreferrer"
             >
@@ -338,8 +338,8 @@ export function App() {
 
           <div className="footer-col footer-cli">
             <h4>CLI</h4>
-            <CopyCommand command="npx audio-normalizer track.wav" />
-            <CopyCommand command="npx audio-normalizer ./sounds -p sfx" />
+            <CopyCommand command="npx audionorm track.wav" />
+            <CopyCommand command="npx audionorm ./sounds -p sfx" />
           </div>
         </div>
 

@@ -6,7 +6,7 @@ sounds all sit at the same comfortable level.
 
 Comes in two forms that share the same loudness logic:
 
-- **CLI (`npx audio-normalizer`)** — batch-process folders from the terminal. Bundles
+- **CLI (`npx audionorm`)** — batch-process folders from the terminal. Bundles
   its own `ffmpeg`, so there is nothing else to install.
 - **Web app** — drag & drop in the browser. **Nothing is uploaded**; all processing
   happens locally with the Web Audio API.
@@ -42,19 +42,19 @@ clip to a consistent, not-too-loud peak.
 
 ```bash
 # Normalize a single file (default preset: streaming / -14 LUFS)
-npx audio-normalizer track.wav
+npx audionorm track.wav
 
 # Fix a folder of too-loud UI sounds, write to a new folder
-npx audio-normalizer ./sounds -p sfx -o ./sounds-fixed
+npx audionorm ./sounds -p sfx -o ./sounds-fixed
 
 # Batch a glob to podcast loudness
-npx audio-normalizer -p podcast "episodes/*.mp3"
+npx audionorm -p podcast "episodes/*.mp3"
 
 # Just measure, don't write anything
-npx audio-normalizer --analyze track.wav
+npx audionorm --analyze track.wav
 
 # Custom target + convert to wav
-npx audio-normalizer --target -12 song.flac -f wav
+npx audionorm --target -12 song.flac -f wav
 ```
 
 ### Options

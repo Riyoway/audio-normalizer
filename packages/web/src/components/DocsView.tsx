@@ -44,7 +44,7 @@ export function DocsView({ onBack }: Props) {
         <h2 className="doc-h">
           <span className="doc-h-i">$</span> Quick start
         </h2>
-        <CopyCommand command="npx audio-normalizer track.wav" />
+        <CopyCommand command="npx audionorm track.wav" />
         <p className="doc-p">
           Normalizes <code className="ic">track.wav</code> to −14 LUFS and writes
           <code className="ic">track-normalized.wav</code> next to it.
@@ -90,13 +90,13 @@ export function DocsView({ onBack }: Props) {
           <span className="doc-h-i">▷</span> Examples
         </h2>
         <p className="doc-p">Fix a folder of too-loud UI sounds into a new folder:</p>
-        <CopyCommand command="npx audio-normalizer ./sounds -p sfx -o ./sounds-fixed" />
+        <CopyCommand command="npx audionorm ./sounds -p sfx -o ./sounds-fixed" />
         <p className="doc-p">Batch a glob to podcast loudness:</p>
-        <CopyCommand command={'npx audio-normalizer -p podcast "episodes/*.mp3"'} />
+        <CopyCommand command={'npx audionorm -p podcast "episodes/*.mp3"'} />
         <p className="doc-p">Just measure — don't write anything:</p>
-        <CopyCommand command="npx audio-normalizer --analyze track.wav" />
+        <CopyCommand command="npx audionorm --analyze track.wav" />
         <p className="doc-p">Custom target and convert to WAV:</p>
-        <CopyCommand command="npx audio-normalizer --target -12 song.flac -f wav" />
+        <CopyCommand command="npx audionorm --target -12 song.flac -f wav" />
       </section>
 
       <section className="doc-section">

@@ -78,17 +78,17 @@ function printHelp(): void {
     (p) => `    ${p.id.padEnd(11)} ${p.label}\n               ${p.description}`,
   ).join("\n");
   console.log(`
-audio-normalizer — normalize audio files to an optimal loudness
+audionorm — normalize audio files to an optimal loudness
 
 USAGE
-  npx audio-normalizer [options] <files|globs|folders...>
+  npx audionorm [options] <files|globs|folders...>
 
 EXAMPLES
-  npx audio-normalizer track.wav
-  npx audio-normalizer -p podcast *.mp3
-  npx audio-normalizer -p sfx ./sounds -o ./sounds-fixed
-  npx audio-normalizer --analyze track.wav
-  npx audio-normalizer --target -12 song.flac -f wav
+  npx audionorm track.wav
+  npx audionorm -p podcast *.mp3
+  npx audionorm -p sfx ./sounds -o ./sounds-fixed
+  npx audionorm --analyze track.wav
+  npx audionorm --target -12 song.flac -f wav
 
 OPTIONS
   -p, --preset <id>     Loudness preset (default: ${DEFAULT_PRESET_ID})
@@ -268,7 +268,7 @@ async function main(): Promise<void> {
   }
 
   console.log(
-    `\naudio-normalizer · preset "${preset.id}" · ${files.length} file(s)` +
+    `\naudionorm · preset "${preset.id}" · ${files.length} file(s)` +
       (opts.analyze ? " · analyze only" : "") +
       "\n",
   );
