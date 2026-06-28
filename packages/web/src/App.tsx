@@ -14,6 +14,7 @@ import type { BitDepth } from "./audio/encodeWav";
 import { Dropzone } from "./components/Dropzone";
 import { FileRow, type FileItem } from "./components/FileRow";
 import { Select } from "./components/Select";
+import { CopyCommand } from "./components/CopyCommand";
 import { usePwaInstall } from "./hooks/usePwaInstall";
 
 const BIT_DEPTH_OPTIONS = [
@@ -178,10 +179,12 @@ export function App() {
         </section>
       )}
 
-        <footer className="footer">
-          <p>
-            Also available as a CLI: <code>npx audio-normalizer ./sounds -p sfx</code>
+        <footer className="footer cli-section">
+          <p className="cli-label">
+            Prefer the terminal? Also available as a CLI (bundles ffmpeg — no install):
           </p>
+          <CopyCommand command="npx audio-normalizer track.wav" />
+          <CopyCommand command="npx audio-normalizer ./sounds -p sfx" />
         </footer>
       </main>
 
