@@ -973,15 +973,15 @@ button:disabled {
 }
 
 .site-footer-inner {
-  max-width: var(--maxw);
+  max-width: 1440px;
   margin: 0 auto;
 }
 
 .footer-grid {
   display: grid;
-  grid-template-columns: 1.6fr 0.7fr 0.7fr 1.4fr;
-  gap: 36px;
-  padding: 44px 22px 34px;
+  grid-template-columns: 1.4fr 0.8fr 0.8fr 1.6fr;
+  gap: clamp(28px, 4vw, 72px);
+  padding: 48px clamp(22px, 5vw, 72px) 36px;
 }
 
 .footer-brand-row {
@@ -1076,7 +1076,7 @@ button:disabled {
   justify-content: space-between;
   flex-wrap: wrap;
   gap: 10px;
-  padding: 18px 22px calc(20px + env(safe-area-inset-bottom));
+  padding: 18px clamp(22px, 5vw, 72px) calc(20px + env(safe-area-inset-bottom));
   border-top: 1px solid var(--line-soft);
   font-size: 0.78rem;
   color: var(--faint);
